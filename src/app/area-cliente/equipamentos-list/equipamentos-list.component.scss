@@ -1,0 +1,48 @@
+@import '../../../styles-variables.scss';
+
+table {
+  width: 100%;
+}
+
+.responsive_table {
+  overflow-x: auto;
+}
+
+.btn-focus {
+  outline: none;
+  box-shadow: none;
+}
+
+h2 {
+  margin: 1.25rem 0;
+}
+
+td.download {
+  padding-left: 0 !important;
+}
+
+.button-text {
+  text-align: right;
+}
+
+th,
+td {
+  white-space: nowrap;
+  padding-left: 2rem !important;
+  text-align: center !important;
+}
+
+.width-button {
+  width: 12rem;
+}
+
+@media (max-width: map-get($grid-breakpoints, md)) {
+  .button-text {
+    text-align: center;
+  }
+
+  .width-button {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+}

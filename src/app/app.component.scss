@@ -1,0 +1,58 @@
+@import '../styles-variables.scss';
+
+.app {
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 5rem;
+  overflow-y: auto !important;
+
+  .content {
+    flex: 1 0 auto;
+  }
+}
+
+img {
+  width: 152.6px;
+  height: 52.3px;
+}
+
+.toolbar {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  z-index: 2;
+
+  mat-toolbar {
+    height: 4.5rem;
+    background-color: $fm-primary;
+    color: white;
+
+    .logout {
+      width: 100%;
+      text-align: end;
+      font-size: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 899px) {
+  .resp-breadcrumb {
+    display: none;
+  }
+
+  .logout {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

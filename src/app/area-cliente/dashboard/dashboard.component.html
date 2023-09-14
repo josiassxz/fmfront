@@ -1,0 +1,139 @@
+<div class="container-fluid">
+  <div class="mt-3">
+    <mat-card>
+      <h2>Bem-vindo(a) {{loginCliente.nome}}</h2>
+      <div class="row mt-2">
+        <div class="col-sm-12 col-md-8 col-lg-10">
+          <mat-form-field>
+            <mat-select placeholder="Selecione a Empresa" [(ngModel)]="empresa">
+              <mat-option *ngFor="let e of listaEmpresas" [value]="e.id">
+                {{e.nome}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-2">
+          <button mat-flat-button class="btn-block" color="primary"
+            (click)="loadAllEmpresas(empresa)">Pesquisar</button>
+        </div>
+      </div>
+      <div [hidden]="equipamentosList.length <= 0">
+        <div class="row mt-2">
+          <div class="col-md-12 col-lg-7">
+            <div class="row">
+              <div class="col-12">
+                <mat-card class="list mat-elevation-z5">
+                  <div class="row">
+                    <div class="d-none d-sm-flex col-sm-6 row-chart">
+                      <div class="cell">
+                        <canvas id="itensChart" height="1" width="1"></canvas>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="equip-title mb-3">Quantidade de Equipamentos por Tipo</div>
+                      <div class="legenda">
+                        <div class="row mt-2" id="itens" *ngFor="let equip of filteredItensList; let index = index">
+                          <div class="col-2 d-flex justify-content-end p-0">
+                            <span class="tipo-equip" [ngStyle]="{'background-color': backgroundItens[index]}"></span>
+                          </div>
+                          <div class="col-10 m-0 p-0 pl-2">
+                            {{equip.descricao}}: {{equip.qtd}} {{equip.qtd > 1 ? 'itens' : 'item'}}
+                          </div>
+                        </div>
+                        <div class="row mt-4">
+                          <div class="col ml-0 ml-sm-5 text-center text-sm-left">
+                            <span class="total">Total: {{itensCount}} {{itensCount > 1 ? 'itens' : 'item'}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12">
+                <mat-card class="list mat-elevation-z5">
+                  <div class="row">
+                    <div class="d-none d-sm-flex col-sm-6 row-chart">
+                      <div class="cell">
+                        <canvas id="vasosChart" height="1" width="1"></canvas>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <div class="equip-title">Quantidade de Vasos de Pressão por Categoria</div>
+                      <div class="legenda">
+                        <div class="row mt-3" id="vasos" *ngFor="let vaso of filteredVasosList; let index = index">
+                          <div class="col-2 d-flex justify-content-end p-0">
+                            <span class="tipo-equip" [ngStyle]="{'background-color': backgroundVasos[index]}"></span>
+                          </div>
+                          <div class="col-10 m-0 p-0 pl-2">
+                            {{vaso.descricao}}: {{vaso.qtd}} {{vaso.qtd > 1 ? 'itens' : 'item'}}
+                          </div>
+                        </div>
+                        <div class="row mt-4">
+                          <div class="col ml-0 ml-sm-5 text-center text-sm-left">
+                            <span class="total">Total: {{vasosCount}} {{vasosCount > 1 ? 'itens' : 'item'}}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-5 margin-top-resp">
+            <mat-card class="list-vencimento mat-elevation-z5">
+              <div class="equip-title">Itens a vencer</div>
+              <div class="legenda-vencimento" *ngIf="tags.length > 0">
+                <div *ngFor="let equip of tags">
+                  <div class="row mt-3">
+                    <div class="col-6-5 equip-tag" [ngStyle]="{color: equip.periodo >= 101 ? '#A71111' : 'black'}">
+                      Tag do Equipamento: {{ equip.tag }}
+                      <br>
+                      {{equip.desc}}: {{ equip.dataFinal | date: 'dd/MM/yyyy' }}
+                    </div>
+                    <div class="col-4-5 progress-bar">
+                      <span [ngStyle]="{
+                          width: progressBar(equip.periodo).valor + '%',
+                          'border-top-right-radius': progressBar(equip.periodo).valor >= 100 ? '20px' : '8px',
+                          'border-bottom-right-radius': progressBar(equip.periodo).valor >= 100 ? '20px' : '8px',
+                          'background-color': progressBar(equip.periodo).cor
+                        }">
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="tags.length <= 0" class="not-found legenda">
+                <span>
+                  Nenhum equipamento está próximo de vencer.
+                </span>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 d-flex justify-content-end mt-3">
+            <button class="button-visao-detalhada" [routerLink]="['/area-cliente/equipamentos', empresaAtual]">
+              <div class="effect">
+                Visão detalhada
+              </div>
+              <mat-icon>{{'arrow_forward'}}</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div [hidden]="equipamentosList.length > 0" class="row mt-2">
+        <div class="col">
+          <mat-card class="mat-elevation-z5">
+            <div class="not-found">
+              Nenhum resultado encontrado.
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

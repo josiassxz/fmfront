@@ -1,0 +1,9 @@
+<ul class="breadcrumb">
+  <li *ngFor="let breadcrumb of breadcrumbs"
+      class="breadcrumb-item">
+    <a mat-button (click)="navigateToPage(breadcrumb)" (keypress)="navigateToPage(breadcrumb)">
+      <mat-icon>{{breadcrumb.icon}}</mat-icon>
+      {{ breadcrumb.label }}
+    </a>
+  </li>
+</ul>

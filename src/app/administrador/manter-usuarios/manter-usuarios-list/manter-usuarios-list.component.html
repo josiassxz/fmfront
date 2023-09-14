@@ -1,0 +1,113 @@
+<div class="container-fluid">
+    <!--BOTAO NOVO-->
+    <br>
+    <h2>Lista de Usuários</h2>
+    <div class="row">
+      <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12">
+        <mat-form-field  class="mat-form-field" >
+          <input matInput placeholder="Nome Do Usuário" [(ngModel)]="filtro.nome" (keyup.enter)="pesquisar()">
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12">
+        <mat-form-field  class="mat-form-field ">
+          <input matInput placeholder="E-mail" [(ngModel)]="filtro.email" (keyup.enter)="pesquisar()">
+        </mat-form-field>
+      </div>
+      <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12">
+        <mat-form-field  class="mat-form-field ">
+          <mat-select placeholder="Tipo de Usuário" [(ngModel)]="filtro.tipo">
+            <mat-option>--</mat-option>
+              <mat-option value="1">Administrador</mat-option>
+              <mat-option value="2">Cliente</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-right">
+        <button  mat-flat-button color="primary" class="btn-block mt-2 width-button"
+                [routerLink]="['/administrador/manter-usuarios/form']" 
+                matTooltip="Novo">Novo
+        </button>
+        <button class="btn-block ml-3 width-button" mat-flat-button color="primary"
+                (click)="limparFiltro()" matTooltip="Limpar">Limpar
+        </button>
+        <button class="btn-block ml-3 width-button" mat-flat-button color="primary"
+                (click)="pesquisar()" matTooltip="Pesquisar">Pesquisar
+        </button>
+      </div>
+    </div>
+    <div class="mat-elevation-z8 mt-3">
+      <div class="responsive_table">
+        <table mat-table [dataSource]="dataSource" summary="Usuarios Cadastrados - Listagem de Usuarios cadastrados">
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef tabindex="0"> Nome</th>
+            <td mat-cell *matCellDef="let element" tabindex="0">
+              <span [matTooltip]="element.nome">
+                {{element.nome ? element.nome.length > 70 ? element.nome.substr(0, 70) + '...' : element.nome : 'Sem Nome'}}
+              </span>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef tabindex="0"> E-mail</th>
+            <td mat-cell *matCellDef="let element" tabindex="0">
+                <span [matTooltip]="element.email">
+                    {{element.email ? element.email.length > 70 ? element.email.substr(0, 70) + '...' : element.email : 'Sem E-mail'}}
+                  </span>
+            </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef tabindex="0"> Tipo de Usuário</th>
+            <td mat-cell *matCellDef="let element" tabindex="0">
+                <span [matTooltip]="getTipo(element.tipo)">
+                    {{getTipo(element.tipo)}}
+                  </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="editar">
+            <th mat-header-cell *matHeaderCellDef tabindex="0" class="text-center"> Editar</th>
+            <td mat-cell *matCellDef="let row" class="text-center">
+              <button  mat-icon-button color="primary"
+                      [routerLink]="['/administrador/manter-usuarios/form/editar',false, row.id]">
+                <fa-icon icon="edit"  matTooltipPosition="above">
+                </fa-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="excluir">
+            <th mat-header-cell *matHeaderCellDef tabindex="0" class="text-center"> Excluir</th>
+            <td mat-cell *matCellDef="let row" class="text-center">
+              <button  mat-icon-button color="primary" (click)="excluir(row)"
+                      data-testid="delete-crud">
+                <fa-icon icon="trash" 
+                         matTooltipPosition="above">
+                </fa-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="visualizar">
+            <th mat-header-cell *matHeaderCellDef tabindex="0" class="text-center"> Visualizar</th>
+            <td mat-cell *matCellDef="let row" class="text-center">
+              <button  mat-icon-button color="primary"
+                      [routerLink]="['/administrador/manter-usuarios/form/visualizar', true, row.id]">
+                <fa-icon [icon]="['fas', 'search']" 
+                         matTooltipPosition="above">
+                </fa-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="resultsLength"
+                       [pageSizeOptions]="pageSizeOptions">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>

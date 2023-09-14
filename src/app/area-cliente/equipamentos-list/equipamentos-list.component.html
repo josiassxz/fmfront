@@ -1,0 +1,480 @@
+<div class="container-fluid">
+  <!--BOTAO NOVO-->
+  <h2>Lista de Equipamentos</h2>
+
+  <div class="row mt-4">
+    <div class="col-sm-12 col-md-6 col-lg-8 col-xl-10">
+      <mat-form-field>
+        <mat-select placeholder="Tipo de Equipamento" [(ngModel)]="tipoEquip">
+          <mat-option *ngFor="let tipo of tiposEquipamento" [value]="tipo.codigo">
+            {{tipo.descricao}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-2">
+      <button class="btn-block w-100" mat-flat-button color="primary" (click)="changeTipo()"
+        matTooltip="Pesquisar">Pesquisar
+      </button>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-sm-12 col-md-4">
+      <mat-form-field>
+        <input matInput placeholder="Ano de Cadastro" maxlength="4" [(ngModel)]="filtro.anoCadastro"
+          (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-4">
+      <mat-form-field>
+        <input matInput placeholder="Tag do Equipamento" [(ngModel)]="filtro.tagEquipamento"
+          (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-4">
+      <mat-form-field>
+        <mat-select placeholder="Norma" [(ngModel)]="filtro.norma" (keyup.enter)="pesquisar()">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let norma of normas" [value]="norma.id">
+            {{norma.descricao}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="tipoEquip == 'VASO' || tipoEquip == 'CALDEIRA'">
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Inspeção Interna" 
+          [(ngModel)]="filtro.inspecaoInterna" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Próxima Inspeção Interna" 
+          [(ngModel)]="filtro.proximaInspecaoInterna" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Inspeção Externa" 
+          [(ngModel)]="filtro.inspecaoExterna" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-3">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Próxima Inspeção Externa" 
+          [(ngModel)]="filtro.proximaInspecaoExterna" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="tipoEquip == 'VALVULA' || tipoEquip.startsWith('INDICADOR')">
+    <div class="col-sm-12 col-md-6">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Data de Calibração" 
+          [(ngModel)]="filtro.dataCalibracao" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Próxima Calibração" 
+          [(ngModel)]="filtro.proximaCalibracao" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="tipoEquip == 'LINHA' || tipoEquip == 'ELEVADOR' || tipoEquip == 'EQUIPAMENTO'">
+    <div class="col-sm-12 col-md-6">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Inspeção" 
+          [(ngModel)]="filtro.inspecao" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-12 col-md-6">
+      <mat-form-field>
+        <input matInput type="date" placeholder="Próxima Inspeção" 
+          [(ngModel)]="filtro.proximaInspecao" (keyup.enter)="pesquisar()">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col-12 button-text">
+      <button class="btn-block width-button" mat-flat-button color="primary" (click)="downloadAllSelected()"
+        matTooltip="Baixar Itens Selecionados" [disabled]="desabilitarBotao">
+        Baixar Itens Selecionados
+      </button>
+      <button class="btn-block ml-3 width-button" mat-flat-button color="primary" (click)="limparFiltro()"
+        matTooltip="Limpar">Limpar
+      </button>
+      <button class="btn-block ml-3 width-button" mat-flat-button color="primary" (click)="pesquisar()"
+        matTooltip="Pesquisar">Pesquisar
+      </button>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8 mt-4">
+    <div class="responsive_table">
+      <table mat-table [dataSource]="dataSource"
+        summary="Equipamentos Cadastrados - Listagem de equipamentos cadastrados">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef tabindex="0">
+            <mat-checkbox class="m-0 p-0" color="primary" 
+              (change)="$event ? checkToggle() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()"
+              [aria-label]="checkboxLabel()"></mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <mat-checkbox class="m-0 p-0" color="primary" (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(element) : null; hasSelected()"
+              [checked]="selection.isSelected(element)"
+              [aria-label]="checkboxLabel(element)"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="anoCadastro">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Ano de Cadastro</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.anoCadastro)">
+              {{fieldValidation(element.anoCadastro)}}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tag">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Tag do Equipamento</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.tagEquipamento)">
+              {{ fieldValidation(element.tagEquipamento) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Descrição</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.descricao)">
+              {{ fieldValidation(element.descricao) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="localizacao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Localização</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.localizacao)">
+              {{fieldValidation(element.localizacao)}}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="norma">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Norma</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="getDescricaoEnum(element.norma, 'N')">
+              {{ getDescricaoEnum(element.norma, 'N') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="observacao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Observação</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.observacao)">
+              {{ fieldValidation(element.observacao) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoria">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Categoria</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.tipoEquipamento === 'VASO' ? getDescricaoEnum(element.categoria, 'VASO') : fieldValidation(element.categoria)">
+              {{ element.tipoEquipamento === 'VASO' ? getDescricaoEnum(element.categoria, 'VASO') : fieldValidation(element.categoria) }}
+            </span>
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="inspecaoInterna">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Inspeção Interna</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.inspecaoInterna ? (element.inspecaoInterna | date: 'dd/MM/yyyy') : '-' ">
+              {{ element.inspecaoInterna ? (element.inspecaoInterna | date: 'dd/MM/yyyy') : '-'  }}
+            </span>
+          </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="pInspecaoInterna">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Próxima Inspeção Interna</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.proximaInspecaoInterna ? (element.proximaInspecaoInterna | date: 'dd/MM/yyyy') : '-'">
+              {{ element.proximaInspecaoInterna ? (element.proximaInspecaoInterna | date: 'dd/MM/yyyy') : '-' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inspecaoExterna">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Inspeção Externa</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.inspecaoExterna ? (element.inspecaoExterna | date: 'dd/MM/yyyy') : '-'">
+              {{ element.inspecaoExterna ? (element.inspecaoExterna | date: 'dd/MM/yyyy') : '-' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="pInspecaoExterna">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Próxima Inspeção Externa</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.proximaInspecaoExterna ? (element.proximaInspecaoExterna | date: 'dd/MM/yyyy') : '-'">
+              {{ element.proximaInspecaoExterna ? (element.proximaInspecaoExterna | date: 'dd/MM/yyyy') : '-' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="placaIndentificacao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Placa de Identificação</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="getDescricaoEnum(element.placaIndentificacao, 'P')">
+              {{ getDescricaoEnum(element.placaIndentificacao, 'P') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valvulaSeguranca">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Válvula de Segurança</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="getDescricaoEnum(element.valvulaSeguranca, 'V')">
+              {{ getDescricaoEnum(element.valvulaSeguranca, 'V') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="indicadorPressao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Indicador de Pressão</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="getDescricaoEnum(element.indicadorPressao, 'I')">
+              {{ getDescricaoEnum(element.indicadorPressao, 'I') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="pmta">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> PMTA</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.pmta)">
+              {{ fieldValidation(element.pmta) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fluido">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Flúido</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.fluido)">
+              {{ fieldValidation(element.fluido) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroRelatorio">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Número do Relatório</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.numRelatorio)">
+              {{ fieldValidation(element.numRelatorio) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="rgi">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Possui RGI</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.possuiRgi === 'S' ? 'Sim' : 'Não'">
+              {{ element.possuiRgi === 'S' ? 'Sim' : 'Não' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="observacaoRgi">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Observação RGI</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.observacaoRgi)">
+              {{ fieldValidation(element.observacaoRgi) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroLacre">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Número do Lacre</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.numLacre)">
+              {{ fieldValidation(element.numLacre) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataCalibracao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Data da Calibração</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.dataCalibracao ? (element.dataCalibracao | date: 'dd/MM/yyyy') : '-'">
+              {{ element.dataCalibracao ? (element.dataCalibracao | date: 'dd/MM/yyyy') : '-' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="proximaCalibracao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Próxima Calibração</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="element.proximaCalibracao ? (element.proximaCalibracao | date: 'dd/MM/yyyy') : '-'">
+              {{ element.proximaCalibracao ? (element.proximaCalibracao | date: 'dd/MM/yyyy') : '-' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="roscaConexao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Rosca da Conexão</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.roscaConexao)">
+              {{ fieldValidation(element.roscaConexao) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="marcaModelo">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Marca/Modelo</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.marcaModelo)">
+              {{ fieldValidation(element.marcaModelo) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="instrumento">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Instrumento</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="getDescricaoEnum(element.instrumento, 'T')">
+              {{ getDescricaoEnum(element.instrumento, 'T') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="escala">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Escala</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.escala)">
+              {{ fieldValidation(element.escala) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="unidadeMedida">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Unidade de Medida</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.unidadeMedida)">
+              {{ fieldValidation(element.unidadeMedida) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tamanho">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Tamanho</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.tamanho)">
+              {{ fieldValidation(element.tamanho) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="bitola">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Bitola</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.bitola)">
+              {{ fieldValidation(element.bitola) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="setPointAbertura">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Set Point de Abertura</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.setPoint)">
+              {{ fieldValidation(element.setPoint) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="unidadeAjuste">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Unidade de Ajuste</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.unidadeAjuste)">
+              {{ fieldValidation(element.unidadeAjuste) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroSerie">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Número de Série</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.numSerie)">
+              {{ fieldValidation(element.numSerie) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="capacidade">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Capacidade</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.capacidade)">
+              {{ fieldValidation(element.capacidade) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Status</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="getDescricaoEnum(element.status, 'S')">
+              {{ getDescricaoEnum(element.status, 'S') }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inspecao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Inspeção</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.inspecao) | date: 'dd/MM/yyyy'">
+              {{ fieldValidation(element.inspecao) | date: 'dd/MM/yyyy' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="proxInspecao">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Próxima Inspeção</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.proximaInspecao) | date: 'dd/MM/yyyy'">
+              {{ fieldValidation(element.proximaInspecao) | date: 'dd/MM/yyyy' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="download">
+          <th mat-header-cell *matHeaderCellDef tabindex="0" style="padding-right: 2rem;"> Baixar Anexos</th>
+          <td mat-cell *matCellDef="let element" tabindex="0" class="download m-0 p-0">
+            <button mat-icon-button color="primary" mat class="btn-focus"
+              (click)="openDialog(element)" [disabled]="element.documentos.length <= 0">
+              <fa-icon icon="download" matTooltip="Baixar Anexos"></fa-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <mat-paginator [length]="resultsLength" [pageSizeOptions]="pageSizeOptions">
+    </mat-paginator>
+  </div>
+</div>

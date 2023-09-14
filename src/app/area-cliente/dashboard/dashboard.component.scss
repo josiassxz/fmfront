@@ -1,0 +1,169 @@
+@import '../../../styles-variables';
+
+h2 {
+  margin: 1.25rem 0;
+  font-weight: bold;
+}
+
+mat-card.list {
+  height: 25rem;
+  overflow-y: hidden;
+  z-index: 1;
+}
+
+mat-card.list-vencimento {
+  height: 51rem;
+  overflow-y: hidden;
+  z-index: 1;
+}
+
+@media (max-width: map-get($grid-breakpoints, lg)) {
+  .margin-top-resp {
+    margin-top: 1.5rem;
+  }
+} 
+
+@media (max-width: map-get($grid-breakpoints, sm)) {
+  div#itens, div#vasos {
+    margin-left: 20%;
+  }
+}
+
+.not-found {
+  height: 5rem;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.row-chart {
+  clear: both;
+  width: 100%;
+  height: 25rem;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1.5rem;
+}
+
+.cell {
+  max-width: 22.875rem;
+  min-width: 80%;
+}
+
+.legenda {
+  height: 22.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.legenda-vencimento {
+  height: 46rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.equip-title {
+  font-size: 1.5rem;
+  padding-top: 1.25rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.total {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.progress-bar {
+  height: 2rem;
+  padding: 6px;
+  background-color: #cdcdcd;
+  display: flex;
+  align-self: center;
+  border-radius: 25px;
+
+  span {
+    display: block;
+    height: 100%;
+    position: relative;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    overflow: hidden;
+  }
+}
+
+span.tipo-equip {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+
+.equip-tag {
+  padding-left: 2rem;
+}
+
+.col-6-5 {
+  flex: 0 0 55%;
+  max-width: 55%;
+}
+
+.col-4-5 {
+  flex: 0 0 45%;
+  max-width: 40%;
+}
+
+button {
+  background-color: white;
+  border: none;
+}
+
+@keyframes go-back {
+  from {
+    transform: translateX(-250px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.button-visao-detalhada {
+  display: flex;
+  height: 3rem;
+  width: 12rem;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #003F6D;
+  font-size: 1rem;
+  border: 1px solid #003F6D;
+  border-radius: 50px;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: #003F6D;
+
+    mat-icon, .effect {
+      color: white;
+      animation: go-back 0.5s;
+    }
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  mat-icon {
+    margin-left: 0.5rem;
+    color: #003F6D;
+  }
+}

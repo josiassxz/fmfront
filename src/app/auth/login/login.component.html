@@ -1,0 +1,79 @@
+<div class="background" role="principal">
+  <div class="gradient">
+    <div class="login-wrapper">
+      <div class="box">
+
+        <mat-card>
+          <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+              <!--PAINEL LOGIN-->
+              <div id="conteudo">
+                <div>
+                  <mat-card-title class="text-center pt-3 title">Login</mat-card-title>
+                  <mat-card-content class="p-3">
+
+                    <form [formGroup]="loginForm" autocomplete="off" novalidate>
+                      <div class="row">
+                        <div class="col-12">
+                          <mat-form-field>
+                            <mat-label>Usuário</mat-label>
+                            <input type="text" matInput placeholder="Usuário" formControlName="apelido" id="apelido"
+                              name="apelido">
+                            <button type="button" mat-icon-button matSuffix class="none-button">
+                              <mat-icon color="primary" [ngStyle]="{'font-size': '20px'}">
+                                account_circle
+                              </mat-icon>
+                            </button>
+                            <mat-error *ngIf="loginForm.get('apelido').hasError('required')">
+                              Usuário é obrigatório.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12 mt-1">
+                          <mat-form-field>
+                            <mat-label>Insira sua senha</mat-label>
+                            <input type="password" matInput placeholder="Insira sua senha" formControlName="senha"
+                              [type]="mostrarSenha ? 'password' : 'text'" id="senha" name="senha">
+                            <button type="button" mat-icon-button matSuffix (click)="mostrarSenha = !mostrarSenha"
+                              [attr.aria-label]="'Senha escondida'" [attr.aria-pressed]="mostrarSenha"
+                              id="visibilidadeSenha" name="visibilidadeSenha">
+                              <mat-icon color="primary" [ngStyle]="{'font-size': '20px'}">{{mostrarSenha ?
+                                'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="loginForm.get('senha').hasError('required')">
+                              Senha é obrigatória.
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row mt-1">
+                        <div class="col-12">
+                          <button mat-flat-button class="btn-block login" type="submit" matTooltip="Login no Sistema"
+                            matTooltipPosition="above" (click)="submit()" id="entrar" name="entrar">
+                            Entrar
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="mt-2 text-center">
+                        <p style="font-size: 12px;" tpbindex="0">
+                          Esqueceu a Senha? Entre em contato com o administrador e solicite a nova!
+                        </p>
+                      </div>
+
+                    </form>
+                  </mat-card-content>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 text-center d-flex">
+              <img class="img-fluid mx-auto my-auto px-4" style="width: 100%" src="assets/img/logo-fm-inspecoes.png">
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="row mb-3">
+    <div class="col-md-12">
+      <button *ngIf="!disableUpload" class="uploadfilecontainer" (click)="fileInput.click()" dpeIntraDragDropFiles
+              (keypress)="fileInput.click()" tabindex="0" aria-label="Insira os arquivos." id="btn-file-upload" type="button">
+        <fa-icon class="icon-file-input" [icon]="['fas','cloud-upload-alt']" [matTooltip]="'Upload de Arquivos'"
+                 matTooltipPosition="above"></fa-icon>
+        <input #fileInput hidden class="file-input" type="file" [multiple]="multiple" [accept]="accept">
+      </button>
+      <div class="mat-elevation-z8">
+        <div class="responsive_table">
+          <table mat-table [dataSource]="dataSourceArquivoUpload" *ngIf="dataSourceArquivoUpload.data.length > 0"
+                 summary="Upload de Arquivos - Listagem de arquivos armazenados" id="table-file-upload">
+            <ng-container matColumnDef="name" class="col-4">
+              <th mat-header-cell *matHeaderCellDef tabindex="0">Nome do Arquivo</th>
+              <td mat-cell *matCellDef="let element" tabindex="0"> {{ element.file && element.file.name ? element.file.name : '' }} </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="tipoArquivo" id="column-uploadfile-descricao">
+              <th mat-header-cell *matHeaderCellDef tabindex="0">Tipo de Arquivo</th>
+              <td mat-cell *matCellDef="let element" tabindex="0">
+                <mat-form-field   [class.mat-form-field-invalid]="(!element.description || element.description.length === 0)">
+                  <mat-label>Tipo de Arquivo</mat-label>
+                  <mat-select required [disabled]="disabled"
+                              (selectionChange)="changeTipo(element, $event.value)"
+                              [(ngModel)]="element.description">
+                    <mat-option *ngFor="let descricao of descricoes" [value]="descricao.codigo">
+                      {{ descricao.descricao }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="excluir">
+              <th mat-header-cell *matHeaderCellDef tabindex="0" class="text-center" style="width: 10% !important;">Excluir</th>
+              <td mat-cell *matCellDef="let row" class="text-center">
+                <button [disabled]="disableExclude"  mat-icon-button color="primary" (click)="excluirArquivo(row)" id="button-delete"
+                        data-testid="delete-crud" type="button">
+                  <fa-icon icon="trash" [matTooltip]="'Excluir Arquivo'" matTooltipPosition="above"></fa-icon>
+                </button>
+              </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="download">
+              <th mat-header-cell *matHeaderCellDef tabindex="0" class="text-center" style="width: 10% !important;">Download</th>
+              <td mat-cell *matCellDef="let row" class="text-center">
+                <button [disabled]="disableDownload" mat-icon-button color="primary" (click)="downloadArquivo(row)" id="button-download" type="button">
+                  <fa-icon icon="download" [matTooltip]="'Download do Arquivo'" matTooltipPosition="above"></fa-icon>
+                </button>
+              </td>
+            </ng-container>
+            <div>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsUploadArquivo"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsUploadArquivo;"></tr>
+            </div>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

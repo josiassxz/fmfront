@@ -1,0 +1,395 @@
+<div class="container-fluid ">
+  <mat-card class="mt-3">
+    <div class="row my-2 ml-1">
+      <div class="col">
+        <h2 tabindex="0" id="title-titulo" #titulo>{{ getTittle() }}</h2>
+      </div>
+    </div>
+    <form [formGroup]="equipamentoForm" novalidate autocomplete="off">
+
+      <div class="row ml-1">
+        <div class="col">
+          <h4 style="color: #333;">Dados do Equipamento</h4>
+        </div>
+      </div>
+      <div class="row mx-1">
+        <div class="col-4">
+          <mat-form-field>
+            <mat-select formControlName="empresa" placeholder="Empresa" [compareWith]="compareFn"  [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let empresa of empresas" [value]="empresa">{{empresa.nome}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="equipamentoForm.get('empresa').invalid">
+              O campo Empresa deve ser informado.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-4 ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="tagEquipamento" required placeholder="Tag do Equipamento" maxlength="255"
+              [readonly]="disabled">
+              <mat-error *ngIf="equipamentoForm.get('tagEquipamento').invalid">
+                O campo Tag do Equipamento deve ser informado.
+              </mat-error>
+          </mat-form-field>
+          
+        </div>
+        <div class="col-4 ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="anoCadastro" toOnlyExclusiveNumber required placeholder="Ano de Cadastro" maxlength="4" minlength="4"
+              [readonly]="disabled">
+              <mat-error *ngIf="equipamentoForm.get('anoCadastro').invalid">
+                O campo Ano deve ser válido.
+              </mat-error>
+          </mat-form-field>
+          
+        </div>
+      </div>
+      <div class="row mx-1">
+        <div class="col-12">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="descricao" required placeholder="Descrição" maxlength="255"
+              [readonly]="disabled">
+              <mat-error *ngIf="equipamentoForm.get('descricao').invalid">
+                O campo Descrição deve ser informado.
+              </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row mx-1">
+        <div class="col-6">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="localizacao" required placeholder="Localização" maxlength="255"
+              [readonly]="disabled">
+              <mat-error *ngIf="equipamentoForm.get('localizacao').invalid">
+                O campo Localização deve ser informado.
+              </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field>
+            <mat-select formControlName="norma" placeholder="Norma" required [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let norma of normas" [value]="norma.id">{{norma.descricao}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="equipamentoForm.get('norma').invalid">
+              O campo Norma deve ser informado.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row mx-1">
+        <div class="col-12">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="observacao" placeholder="Observação" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row mx-1">
+        <div class="col-12">
+          <mat-form-field>
+            <mat-select formControlName="tipoEquipamento" placeholder="Tipo de Equipamento" [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let tipo of tiposEquipamentos" [value]="tipo.codigo">{{ tipo.descricao }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="equipamentoForm.get('tipoEquipamento').invalid">
+              O campo Tipo do Equipamento deve ser informado.
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row ml-1" *ngIf="equipamentoForm.controls['tipoEquipamento'].value ">
+        <div class="col">
+          <h4 style="color: #333;">Informações Complementares</h4>
+        </div>
+      </div>
+
+      <div class="row ml-1 ">
+        
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+
+          <mat-form-field>
+            <input matInput formControlName="inspecaoInterna" placeholder="Inspeção Interna"
+              [matDatepicker]="inspecaoInternaPicker" (click)="inspecaoInternaPicker.open()" [disabled]="disabled" [readonly]="disabled" >
+            <mat-datepicker-toggle matSuffix [for]="inspecaoInternaPicker" [disabled]="disabled" ></mat-datepicker-toggle>
+            <mat-datepicker #inspecaoInternaPicker [disabled]="disabled" ></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+
+          <mat-form-field>
+
+            <input matInput formControlName="proximaInspecaoInterna" placeholder="Próxima Inspeção Interna"
+              [matDatepicker]="proximaInspecaoInternaPicker" (click)="proximaInspecaoInternaPicker.open()" [disabled]="disabled" [readonly]="disabled">
+            <mat-datepicker-toggle matSuffix [for]="proximaInspecaoInternaPicker" [disabled]="disabled"></mat-datepicker-toggle>
+            <mat-datepicker #proximaInspecaoInternaPicker [disabled]="disabled"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+          <mat-form-field>
+
+            <input matInput formControlName="inspecaoExterna" placeholder="Inspeção Externa"
+              [matDatepicker]="inspecaoExternaPicker" (click)="inspecaoExternaPicker.open()" [disabled]="disabled" [readonly]="disabled">
+            <mat-datepicker-toggle matSuffix [for]="inspecaoExternaPicker" [disabled]="disabled"></mat-datepicker-toggle>
+            <mat-datepicker #inspecaoExternaPicker [disabled]="disabled"></mat-datepicker>
+
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+          <mat-form-field>
+
+            <input matInput formControlName="proximaInspecaoExterna" placeholder="Próxima Inspeção Externa"
+              [matDatepicker]="proximaInspecaoExternaPicker" (click)="proximaInspecaoExternaPicker.open()" [disabled]="disabled" [readonly]="disabled">
+            <mat-datepicker-toggle matSuffix [for]="proximaInspecaoExternaPicker" [disabled]="disabled"></mat-datepicker-toggle>
+            <mat-datepicker #proximaInspecaoExternaPicker [disabled]="disabled"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' || equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA' ">
+          <mat-form-field>
+
+            <input matInput formControlName="dataCalibracao" placeholder="Data da Calibração"
+              [matDatepicker]="dataCalibracaoPicker" (click)="dataCalibracaoPicker.open()" [disabled]="disabled" [readonly]="disabled">
+            <mat-datepicker-toggle matSuffix [for]="dataCalibracaoPicker" [disabled]="disabled"></mat-datepicker-toggle>
+            <mat-datepicker #dataCalibracaoPicker [disabled]="disabled"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' || equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA' ">
+          <mat-form-field>
+
+            <input matInput formControlName="proximaCalibracao" placeholder="Próxima Calibração"
+              [matDatepicker]="proximaCalibracaoPicker" (click)="proximaCalibracaoPicker.open()" [disabled]="disabled" [readonly]="disabled">
+            <mat-datepicker-toggle matSuffix [for]="proximaCalibracaoPicker" [disabled]="disabled"></mat-datepicker-toggle>
+            <mat-datepicker #proximaCalibracaoPicker [disabled]="disabled"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+          <mat-form-field class="mat-form-field" >
+            <input matInput formControlName="pmta" placeholder="PMTA" maxlength="255"
+              [readonly]="disabled" [disabled]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' || equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA'">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="numLacre" placeholder="N° do lacre" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3"  *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA'">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="roscaConexao" placeholder="Rosca de conexão" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3"  *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' || equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA'  ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="marcaModelo" placeholder="Marca/Modelo" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3"  *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA'  ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="setPoint" placeholder="Set point abertura" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3"  *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA'  ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="unidadeAjuste" placeholder="Unidade de ajuste" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="escala" placeholder="Escala" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3"  *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="unidadeMedida" placeholder="Unidade de medida" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3"  *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="tamanho" placeholder="Tamanho" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3"  *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA' ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="bitola" placeholder="Bitola" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="fluido" placeholder="Fluído" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA'  || equipamentoForm.controls['tipoEquipamento'].value === 'LINHA' || equipamentoForm.controls['tipoEquipamento'].value === 'ELEVADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'EQUIPAMENTO'">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="numRelatorio" placeholder="N° do relatório" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'EQUIPAMENTO'">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="laudoValSeguranca" placeholder="Laudo de válvula de segurança" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'LINHA' || equipamentoForm.controls['tipoEquipamento'].value === 'ELEVADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'EQUIPAMENTO'">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="numSerie" placeholder="N° de série" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'LINHA' || equipamentoForm.controls['tipoEquipamento'].value === 'ELEVADOR'">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="capacidade" placeholder="Capacidade" maxlength="255"
+              [readonly]="disabled">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA'" >
+          <mat-form-field>
+            <mat-select formControlName="categoriaCaldeira" placeholder="Categoria" [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let categoria of categoriasCaldeiras" [value]="categoria.id">{{categoria.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO'" >
+          <mat-form-field>
+            <mat-select formControlName="categoriaVaso" placeholder="Categoria" [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let categoria of categoriasVasos" [value]="categoria.id">{{categoria.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA'  || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' || equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA'">
+          <mat-form-field class="mat-form-field">
+            <mat-select formControlName="condicao" placeholder="Condição" [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let condicao of condicoes" [value]="condicao.id">{{condicao.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA'  || equipamentoForm.controls['tipoEquipamento'].value === 'LINHA' || equipamentoForm.controls['tipoEquipamento'].value === 'ELEVADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'EQUIPAMENTO'">
+          <mat-form-field>
+            <mat-select formControlName="placaIndentificacao" placeholder="Placa de indentificação" [disabled]="disabled" >
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let placa of placas" [value]="placa.id">{{placa.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+          <mat-form-field >
+            <mat-select formControlName="valvulaSeguranca" placeholder="Válvula de segurança" [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let valvula of valvulas" [value]="valvula.id">{{valvula.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+          <mat-form-field>
+            <mat-select formControlName="indicadorPressao" placeholder="Indicador de pressão"  [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let indicador of indicadores" [value]="indicador.id">{{indicador.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA' ">
+          <mat-form-field>
+            <mat-select formControlName="possuiRgi" placeholder="Possui RGI"  [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let rgi of simNao" [value]="rgi.id">{{rgi.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-4" *ngIf="equipamentoForm.controls['possuiRgi'].value === 'S'">
+          <mat-form-field class="mat-form-field">
+            <input matInput formControlName="observacaoRgi" placeholder="Observação do RGI" maxlength="255">
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR'">
+          <mat-form-field>
+            <mat-select formControlName="instrumento" placeholder="Instrumento"  [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let instrumento of instrumentos" [value]="instrumento.id">{{instrumento.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf=" equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA'">
+          <mat-form-field>
+            <mat-select formControlName="instrumentoTemperatura" placeholder="Instrumento"  [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let instrumento of instrumentosTemperatura" [value]="instrumento.id">{{instrumento.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'VASO' || equipamentoForm.controls['tipoEquipamento'].value === 'CALDEIRA'  || equipamentoForm.controls['tipoEquipamento'].value === 'LINHA' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'INDICADOR_TEMPERATURA' || equipamentoForm.controls['tipoEquipamento'].value === 'ELEVADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'EQUIPAMENTO' || equipamentoForm.controls['tipoEquipamento'].value === 'VALVULA' ">
+          <mat-form-field>
+            <mat-select formControlName="status" placeholder="Status"  [disabled]="disabled">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let status of status" [value]="status.id">{{status.descricao}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'LINHA' || equipamentoForm.controls['tipoEquipamento'].value === 'ELEVADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'EQUIPAMENTO'">
+          <mat-form-field>
+
+            <input matInput formControlName="inspecao" placeholder="Inspeção"
+              [matDatepicker]="inspecaoPicker" (click)="inspecaoPicker.open()" [disabled]="disabled" [readonly]="disabled">
+            <mat-datepicker-toggle matSuffix [for]="inspecaoPicker"  [disabled]="disabled" ></mat-datepicker-toggle>
+            <mat-datepicker #inspecaoPicker  [disabled]="disabled" ></mat-datepicker>
+          </mat-form-field>
+        </div>
+        
+        <div class="col-3" *ngIf="equipamentoForm.controls['tipoEquipamento'].value === 'LINHA' || equipamentoForm.controls['tipoEquipamento'].value === 'ELEVADOR' || equipamentoForm.controls['tipoEquipamento'].value === 'EQUIPAMENTO'">
+          <mat-form-field>
+
+            <input matInput formControlName="proximaInspecao" placeholder="Próxima Inspeção"
+              [matDatepicker]="proximaInspecaoPicker" (click)="proximaInspecaoPicker.open()" [disabled]="disabled" [readonly]="disabled">
+            <mat-datepicker-toggle matSuffix [for]="proximaInspecaoPicker"  [disabled]="disabled" ></mat-datepicker-toggle>
+            <mat-datepicker #proximaInspecaoPicker  [disabled]="disabled" ></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="row ml-1">
+        <div class="col">
+          <h4 style="color: #333;">Documentações</h4>
+        </div>
+      </div>
+
+      <div class="row mx-1" [formGroup]="anexosForm">
+        <div class="col-12">
+          <app-equipamentos-file-upload formControlName="documentos" id="file-upload-ato" [validateTipo]="validateTipo"
+            [showData]="true" [extensoes]="['pdf']" [accept]="'.pdf'" [disableDownload]="false"
+            [disableUpload]="disabled" [disableExclude]="disabled" [disabled]="disabled" [multiple]="true">
+          </app-equipamentos-file-upload>
+        </div>
+
+      </div>
+
+      <div class="col-12 row justify-content-md-end justify-content-xs-center  d-flex">
+        <div class="col-xs-12 col-sm-12 col-lg-4  d-lg-flex text-md-right text-sm-center align-items-center mb-3 ">
+          <button *ngIf="!disabled" mat-flat-button color="primary" class="btn-block ml-3 mt-md-2 " type="button"
+            [routerLink]="['/administrador/manter-equipamentos/lista']" matTooltip="Cancelar">Cancelar
+          </button>
+          <button *ngIf="!disabled" mat-flat-button color="primary" class="btn-block ml-3" type="submit"
+            (click)="saveOrUpdate()" matTooltip="Salvar">Salvar
+          </button>
+          <button *ngIf="disabled" mat-flat-button color="primary" class="btn-block ml-3" type="button"
+            [routerLink]="['/administrador/manter-equipamentos/lista']" matTooltip="Voltar">Voltar
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+</div>

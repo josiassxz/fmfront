@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h1 rtl class="main-heading" tabindex="0" id="titulo">Administrador</h1>
+    </div>
+  </div>
+  <div class="row align-items-end">
+    <div class="col-sm-12 col-lg-6 col-xl-4">
+      <a [routerLink]="['/administrador/manter-usuarios/lista']">
+        <mat-card class="card">
+          <mat-card-header class="card-header">
+            <mat-card-title>Manter Usuários</mat-card-title>
+            <mat-card-subtitle>Manter Usuários de Acessos</mat-card-subtitle>
+            <div class="d-flex justify-content-end align-items-center icon-head">
+              <mat-icon class="icon">{{'manage_accounts'}}</mat-icon>
+            </div>
+          </mat-card-header>
+        </mat-card>
+      </a>
+    </div>
+    <div class="col-sm-12 col-lg-6 col-xl-4 mt-3">
+      <a [routerLink]="['/administrador/manter-empresas/lista']">
+        <mat-card class="card">
+          <mat-card-header class="card-header">
+            <mat-card-title>Manter Empresas</mat-card-title>
+            <mat-card-subtitle>Manter Empresas Clientes</mat-card-subtitle>
+            <div class="d-flex justify-content-end align-items-center icon-head">
+              <mat-icon class="icon">{{'apartment'}}</mat-icon>
+            </div>
+          </mat-card-header>
+        </mat-card>
+      </a>
+    </div>
+    <div class="col-sm-12 col-lg-6 col-xl-4 mt-3">
+      <a [routerLink]="['/administrador/manter-equipamentos/lista']">
+        <mat-card class="card">
+          <mat-card-header class="card-header">
+            <mat-card-title>Manter Equipamentos</mat-card-title>
+            <mat-card-subtitle>Manter Equipamentos das Empresas</mat-card-subtitle>
+            <div class="d-flex justify-content-end align-items-center icon-head">
+              <mat-icon class="icon">{{'construction'}}</mat-icon>
+            </div>
+          </mat-card-header>
+        </mat-card>
+      </a>
+    </div>
+  </div>
+</div>

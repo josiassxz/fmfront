@@ -1,0 +1,16 @@
+<h1 mat-dialog-title class="text-center">Baixar Anexo(s)</h1>
+<div mat-dialog-actions class="dialog-box">
+  <div *ngFor="let download of downloadButtonList" class="w-100 mt-3">
+    <button class="btn-block" mat-flat-button color="primary" (click)="onDownload(download)">
+      {{getDescricao(download)}}
+      <fa-icon icon="download" class="ml-2"></fa-icon>
+    </button>
+  </div>
+  <mat-divider class="w-100 my-3"></mat-divider>
+  <div class="w-100">
+    <button class="btn-block" mat-flat-button color="primary" (click)="onDownloadAll()">
+      Baixar todos os anexos
+      <fa-icon icon="download" class="ml-2"></fa-icon>
+    </button>
+  </div>
+</div>

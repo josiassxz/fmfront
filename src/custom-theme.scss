@@ -1,0 +1,60 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+$navy-blue-palette: (
+  50: #e2f0f5,
+  100: #b9d9e8,
+  200: #8fc1d9,
+  300: #69a9ca,
+  400: #4d98c1,
+  500: #3388b9,
+  600: #277cae,
+  700: #1a6b9d,
+  800: #105b8c,
+  900: #003F6D,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white
+  )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$FmInspecao-primary: mat.define-palette($navy-blue-palette, 900);
+$FmInspecao-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$FmInspecao-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$FmInspecao-theme: mat.define-light-theme((
+  color: (
+    primary: $FmInspecao-primary,
+    accent: $FmInspecao-accent,
+    warn: $FmInspecao-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($FmInspecao-theme);
+

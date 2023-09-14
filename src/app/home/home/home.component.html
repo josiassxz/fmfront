@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h1 rtl class="main-heading" tabindex="0" id="titulo">Página Inicial</h1>
+    </div>
+  </div>
+  <div class="row align-items-end">
+    <div [ngClass]="{'col-12': !loginAdmin, 'col-md-12 col-lg-6': loginAdmin}">
+      <a (click)="onNavigation('area-cliente')"
+        (keypress)="onNavigation('area-cliente')" tabindex="0">
+        <mat-card class="card">
+          <mat-card-header class="card-header">
+            <mat-card-title>
+              Área do Cliente
+            </mat-card-title>
+            <mat-card-subtitle rtl>
+              Consultar Informações da Empresa
+            </mat-card-subtitle>
+            <div class="d-flex justify-content-end align-items-center icon-head">
+              <mat-icon class="icon" color="primary">{{'group'}}</mat-icon>
+            </div>
+          </mat-card-header>
+        </mat-card>
+      </a>
+    </div>
+    <div class="col-md-12 col-lg-6 mt-3" *ngIf="loginAdmin">
+      <a (click)="onNavigation('administrador')"
+        (keypress)="onNavigation('administrador')" tabindex="0">
+        <mat-card class="card">
+          <mat-card-header class="card-header">
+            <mat-card-title>
+              Administrador
+            </mat-card-title>
+            <mat-card-subtitle rtl>
+              Gerenciar Informações das Empresas
+            </mat-card-subtitle>
+            <div class="d-flex justify-content-end align-items-center icon-head">
+              <mat-icon class="icon justify-content-end" color="primary">{{'engineering'}}</mat-icon>
+            </div>
+          </mat-card-header>
+        </mat-card>
+      </a>
+    </div>
+  </div>
+</div>

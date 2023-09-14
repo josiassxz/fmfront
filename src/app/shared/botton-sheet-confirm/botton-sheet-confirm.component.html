@@ -1,0 +1,23 @@
+<div class="card">
+  <div fxLayout="row" fxLayoutAlign="center">
+    <h2 class="text-center">
+      {{ 'Confirma exclusão do registro?' }}
+    </h2>
+  </div>
+
+
+  <div class="row">
+    <div class="col">
+      <button class="btn-block " type="button" mat-flat-button color="primary"
+        (click)="confirmAction($event, false)"  id="btn-bts-cancela">
+        Não
+      </button>
+    </div>
+    <div class="col">
+      <button class="btn-block" type="button" mat-flat-button color="primary"
+        (click)="confirmAction($event, true)" id="btn-bts-confirma">
+        Sim
+      </button>
+    </div>
+  </div>
+</div>
