@@ -1,5 +1,5 @@
 export const environment = {
-  URL_SERVER_API: 'http://localhost:8080'
+  URL_SERVER_API: 'http://ec2-13-49-243-152.eu-north-1.compute.amazonaws.com:8080'
 }
 
 /*============ INICIO COLUNAS EQUIPAMENTOS ===========*/
