@@ -44,13 +44,17 @@ export class LoginComponent implements OnInit {
     const usuario = { email: data.apelido, senha: data.senha };
     this.authService.login(usuario).subscribe(
       res => {
+        const date = new Date();
+        const TIME = { hora: date.getHours(), minuto: date.getMinutes() }
+
         this.localStorageService.setItem('LOGIN', res);
+        this.localStorageService.setItem('LOGIN-TIME', TIME);
         location.reload();
         setTimeout(() => {
           this.router.navigate(['home']);
-        }, 500); 
+        }, 500);
       },
-      err => {
+      () => {
         this.notificationService.warn('Usuário não encontrado.');
         return;
       });

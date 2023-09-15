@@ -13,7 +13,7 @@ import { ManterUsuariosService } from '../manter-usuarios.service';
   templateUrl: './manter-usuarios-form.component.html',
   styleUrls: ['./manter-usuarios-form.component.css']
 })
-export class ManterUsuariosFormComponent implements OnInit, AfterViewInit{
+export class ManterUsuariosFormComponent implements OnInit, AfterViewInit {
 
   edicao: boolean = false;
   usuarioForm: FormGroup;
@@ -35,12 +35,9 @@ export class ManterUsuariosFormComponent implements OnInit, AfterViewInit{
   constructor(
     private formBuilder: FormBuilder,
     private usuarioService: ManterUsuariosService,
-   // private planoCarreiraService: PlanoCarreiraService,
-   // private notificationService: NotificationService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
-   // public store: Store
-  ) {}
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -59,7 +56,7 @@ export class ManterUsuariosFormComponent implements OnInit, AfterViewInit{
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-   // document.getElementById('titulo').focus();
+    // document.getElementById('titulo').focus();
   }
 
   @ViewChild(MatPaginator)
@@ -71,7 +68,7 @@ export class ManterUsuariosFormComponent implements OnInit, AfterViewInit{
   private initForm(): void {
     this.usuarioForm = this.formBuilder.group({
       nome: new FormControl('', [Validators.required, Validators.maxLength(255)]),
-      email: new FormControl('', [Validators.required, Validators.maxLength(255),  Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.maxLength(255), Validators.email]),
       senha: new FormControl('', [Validators.required]),
       tipo: new FormControl('', [Validators.required])
     });
@@ -88,18 +85,17 @@ export class ManterUsuariosFormComponent implements OnInit, AfterViewInit{
   saveOrUpdate() {
     if (this.validarForm(this.usuarioForm)) {
       const usuario = this.usuarioForm.value;
-      console.log(usuario);
       if (this.edicao) {
         usuario.id = this.usuario.id;
         this.usuarioService.alterar(usuario).subscribe(() => {
-         // this.notificationService.success('msg.004');
-         this.router.navigate(['/administrador/manter-usuarios/lista']);
+          // this.notificationService.success('msg.004');
+          this.router.navigate(['/administrador/manter-usuarios/lista']);
         });
       } else {
         this.usuarioService.salvar(usuario).subscribe(() => {
-        //  this.notificationService.success('msg.004');
+          //  this.notificationService.success('msg.004');
           this.router.navigate(['/administrador/manter-usuarios/lista']);
-       });
+        });
       }
     }
   }

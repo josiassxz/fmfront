@@ -231,7 +231,6 @@ export class ManterEmpresasFormComponent implements OnInit, AfterViewInit {
       empresa.usuarios = this.dataSource.data.map(usuario => {
         return { id: usuario.id }
       });
-      console.log(empresa);
       if (this.edicao) {
         empresa.id = this.empresa.id;
         this.empresaService.alterar(empresa).subscribe(() => {
@@ -257,7 +256,6 @@ export class ManterEmpresasFormComponent implements OnInit, AfterViewInit {
 
   vincularUsuario() {
     const usuario = this.empresaForm.get('usuarios').value;
-    console.log(this.dataSource.data, "veio esse data")
     if (ObjUtils.isNotEmpty(usuario)) {
       if (!this.dataSource.data) {
         this.dataSource = new MatTableDataSource([]);

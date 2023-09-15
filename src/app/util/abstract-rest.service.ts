@@ -8,6 +8,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Pagination } from '../models/pagination.interface';
+import { environment } from './static-data';
 
 export class AbstractRestService<T> {
   /**
@@ -15,7 +16,7 @@ export class AbstractRestService<T> {
    * @param {string} route.
    */
   constructor(protected readonly _http: HttpClient, protected readonly route: string) {
-    this.route = `http://localhost:8080/${route}`;
+    this.route = `${environment.URL_SERVER_API}/${route}`;
   }
 
   /**

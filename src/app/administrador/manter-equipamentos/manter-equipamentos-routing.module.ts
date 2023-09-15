@@ -4,7 +4,7 @@ import { ManterEquipamentosListComponent } from './manter-equipamentos-list/mant
 import { ManterEquipamentosFormComponent } from './manter-equipamentos-form/manter-equipamentos-form.component';
 
 const routes: Routes = [
-  { path: 'manter-equipamentos', redirectTo: 'lista', data: { title: '' } },
+  { path: '', redirectTo: 'lista', pathMatch: 'full' },
   {
     path: 'lista',
     component: ManterEquipamentosListComponent,

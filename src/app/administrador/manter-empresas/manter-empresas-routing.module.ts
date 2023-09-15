@@ -4,7 +4,7 @@ import { ManterEmpresasListComponent } from './manter-empresas-list/manter-empre
 import { ManterEmpresasFormComponent } from './manter-empresas-form/manter-empresas-form.component';
 
 const routes: Routes = [
-  { path: 'manter-empresas', redirectTo: 'lista', data: { title: '' } },
+  { path: '', redirectTo: 'lista', pathMatch: 'full' },
   {
     path: 'lista',
     component: ManterEmpresasListComponent,

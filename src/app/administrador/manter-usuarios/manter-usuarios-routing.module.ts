@@ -4,7 +4,7 @@ import { ManterUsuariosListComponent } from './manter-usuarios-list/manter-usuar
 import { ManterUsuariosFormComponent } from './manter-usuarios-form/manter-usuarios-form.component';
 
 const routes: Routes = [
-  { path: 'manter-usuarios', redirectTo: 'lista', data: { title: '' } },
+  { path: '', redirectTo: 'lista', pathMatch: 'full' },
   {
     path: 'lista',
     component: ManterUsuariosListComponent,

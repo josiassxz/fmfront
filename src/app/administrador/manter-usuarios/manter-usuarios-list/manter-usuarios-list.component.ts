@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild  } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import UsuarioModel from 'src/app/models/usuario.model';
@@ -19,12 +19,12 @@ import { MatFormField } from '@angular/material/form-field';
 export class ManterUsuariosListComponent implements OnInit, AfterViewInit {
 
   isLoading = true;
-  usuario: UsuarioModel[]= [];
+  usuario: UsuarioModel[] = [];
   displayedColumns: string[] = ['nome', 'email', 'tipo', 'editar', 'excluir', 'visualizar'];
 
   dataSource = new MatTableDataSource([]);
   pageSizeOptions: number[] = [5, 10, 25, 100];
-  pageEvent: PageEvent;   
+  pageEvent: PageEvent;
   totalElements = 0;
   size = 5;
   page = 0;
@@ -41,8 +41,8 @@ export class ManterUsuariosListComponent implements OnInit, AfterViewInit {
   };
 
   tipo = [
-    {id: 1, descricao: 'Administrador' },
-    {id: 2, descricao: 'Cliente' }
+    { id: 1, descricao: 'Administrador' },
+    { id: 2, descricao: 'Cliente' }
   ]
 
 
@@ -50,12 +50,12 @@ export class ManterUsuariosListComponent implements OnInit, AfterViewInit {
     private bottomSheet: MatBottomSheet,
     private usuarioService: ManterUsuariosService,
     //private matFormField: MatFormField
-   // public store: Store
-  ) {}
+    // public store: Store
+  ) { }
 
   ngOnInit() {
-   // this.listarUsuarios();
-  // this.matFormField.matForm.hide();
+    // this.listarUsuarios();
+    // this.matFormField.matForm.hide();
 
   }
 
@@ -89,7 +89,6 @@ export class ManterUsuariosListComponent implements OnInit, AfterViewInit {
 
           this.isLoadingResults = true;
           //return this.planoCarreiraService.pagination(param);
-          console.log(param, "mandei esses parametros");
           return this.usuarioService.pagination(param);
         }),
         map(data => {
@@ -125,7 +124,7 @@ export class ManterUsuariosListComponent implements OnInit, AfterViewInit {
     this.paginator.firstPage();
   }
 
-  getTipo(id){
+  getTipo(id) {
     return this.tipo.find(i => i.id == id).descricao
   }
 
@@ -143,13 +142,13 @@ export class ManterUsuariosListComponent implements OnInit, AfterViewInit {
       .subscribe((confirma: boolean) => {
         if (confirma) {
           this.usuarioService.excluir(usuario.id).subscribe(() => {
-           //this.notificationService.success('msg.004');
-           this.pesquisar();
+            //this.notificationService.success('msg.004');
+            this.pesquisar();
           });
         }
       });
 
-      
+
   }
 
 }

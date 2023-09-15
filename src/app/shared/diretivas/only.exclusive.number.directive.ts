@@ -10,7 +10,6 @@ export class OnlyExclusiveNumberDirective {
 
   @HostListener('keypress', ['$event'])
   onKeypress(event: KeyboardEvent) {
-    // console.log(event.key, this.arrayRegex.test(event.key))
     return this.arrayRegex.test(event.key);
     let patternOnlyNumber = null;
     if (this.defaultMaxLength && isNumeric(this.defaultMaxLength)) {

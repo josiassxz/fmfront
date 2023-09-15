@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService } from './shared/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,15 @@ export class AppComponent implements OnInit {
 
   constructor(
     private localStorageService: LocalStorageService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.verifyLogin();
+
+    this.router.events.subscribe(() => {
+      this.verifyLoginTime();
+    });
   }
 
   verifyLogin() {
@@ -25,8 +31,22 @@ export class AppComponent implements OnInit {
     }
   }
 
+  verifyLoginTime() {
+    const actualDate = new Date();
+    const time = this.localStorageService.getItem('LOGIN-TIME');
+
+    if (
+      !time && this.loginCliente ||
+      actualDate.getHours() > time?.hora + 1 ||
+      actualDate.getHours() > time?.hora && actualDate.getMinutes() > time?.minuto
+    ) {
+      this.logout();
+    }
+  }
+
   logout() {
     this.localStorageService.removeItem('LOGIN');
+    this.localStorageService.removeItem('LOGIN-TIME');
     location.reload();
   }
 }
