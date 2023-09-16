@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   fminspecao:
-    image: fminspecao
+    image: josiassxz/fminspect-front
     build: .
     ports:
       - 8081:80
