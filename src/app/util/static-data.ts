@@ -21,6 +21,23 @@ export const VASOS_PRESSAO_CALDEIRA_COLUMNS = [
   'status'
 ];
 
+export const TUBULACAO_COLUMNS = [
+  'classe',
+  'inspecaoInterna',
+  'pInspecaoInterna',
+  'inspecaoExterna',
+  'pInspecaoExterna',
+  'placaIndentificacao',
+  'valvulaSeguranca',
+  'indicadorPressao',
+  'pmta',
+  'fluido',
+  'numeroRelatorio',
+  'rgi',
+  'observacaoRgi',
+  'status'
+];
+
 export const INDICADORES_PRESSAO_COLUMNS = [
   'numeroLacre',
   'dataCalibracao',

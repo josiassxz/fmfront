@@ -7,8 +7,9 @@ import {
   EQUIPAMENTO_COLUMNS,
   INDICADORES_PRESSAO_COLUMNS,
   LINHA_VIDA_ELEVADOR_COLUMNS,
+  TUBULACAO_COLUMNS,
   VALVULAS_SEGURANCA_COLUMNS,
-  VASOS_PRESSAO_CALDEIRA_COLUMNS
+  VASOS_PRESSAO_CALDEIRA_COLUMNS,
 } from 'src/app/util/static-data';
 import EquipamentoModel from 'src/app/models/equipamento.model';
 import { UtilFunction } from 'src/app/util/util.function';
@@ -20,16 +21,13 @@ import { DialogDownloadComponent } from './dialog-download/dialog-download.compo
 import { SelectionModel } from '@angular/cdk/collections';
 import { ObjUtils } from 'src/app/util/obj.util';
 import { TipoArquivoEnum } from 'src/app/enums/tipo-arquivo.enum';
-import { CondicaoEnum } from 'src/app/enums/condicoes.enum';
 import { IndicadoresEnum } from 'src/app/enums/indicadores.enum';
 import { InstrumentosEnum } from 'src/app/enums/instrumentos.enum';
 import { NormasEnum } from 'src/app/enums/normas.enum';
 import { PlacasEnum } from 'src/app/enums/placas.enum';
-import { SimNaoEnum } from 'src/app/enums/sim-nao.enum';
 import { StatusEnum } from 'src/app/enums/status.enum';
 import { ValvulasEnum } from 'src/app/enums/valvulas.enum';
 import { CategoriaVasosEnum } from 'src/app/enums/categoria-vasos.enum';
-import { CategoriaCaldeirasEnum } from 'src/app/enums/categoria-caldeiras.enum';
 
 @Component({
   selector: 'app-equipamentos-list',
@@ -48,6 +46,7 @@ export class EquipamentosListComponent implements OnInit, AfterViewInit {
   valvulasSegurancaColumns = VALVULAS_SEGURANCA_COLUMNS;
   linhaVidaElevadorColumns = LINHA_VIDA_ELEVADOR_COLUMNS;
   equipamentoColumns = EQUIPAMENTO_COLUMNS;
+  tubulacaoColumns = TUBULACAO_COLUMNS;
 
   selection = new SelectionModel<EquipamentoModel>(true, []);
   desabilitarBotao = true;
@@ -214,6 +213,14 @@ export class EquipamentosListComponent implements OnInit, AfterViewInit {
           'select',
           ...this.padraoColumns,
           ...this.equipamentoColumns,
+          'download'
+        ];
+        break;
+      case 'TUBULACAO':
+        this.displayedColumns = [
+          'select',
+          ...this.padraoColumns,
+          ...this.tubulacaoColumns,
           'download'
         ];
         break;

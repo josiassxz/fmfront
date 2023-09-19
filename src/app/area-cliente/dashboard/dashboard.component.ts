@@ -29,14 +29,15 @@ export class DashboardComponent implements OnInit {
   vasosCount = 0;
 
   backgroundItens = [
-    '#577590',
-    '#43AA8B',
-    '#90BE6D',
-    '#E6E898',
-    '#F9C74F',
-    '#F94144',
-    '#F3722C',
-    '#F8961E'
+    '#9e9e9e',
+    '#607d8b',
+    '#009688',
+    '#4caf50',
+    '#8bc34a',
+    '#ffc107',
+    '#ff9800',
+    '#ff5722',
+    '#f44336'
   ];
 
   backgroundVasos = [
@@ -85,11 +86,11 @@ export class DashboardComponent implements OnInit {
         this.tags = [];
         this.equipamentosList = res;
         this.equipamentosList.forEach((equip: EquipamentoModel) => {
-          if (equip.tipoEquipamento.startsWith('VAS') || equip.tipoEquipamento.startsWith('C')) {
+          if (equip.tipoEquipamento.startsWith('VAS') || equip.tipoEquipamento.startsWith('C') || equip.tipoEquipamento.startsWith('T')) {
             const calcInterno = this.calcularPeriodo(equip.inspecaoInterna, equip.proximaInspecaoInterna);
             const calcExterno = this.calcularPeriodo(equip.inspecaoExterna, equip.proximaInspecaoExterna);
 
-            if (equip.tipoEquipamento.startsWith('VAS')) {
+            if (equip.tipoEquipamento.startsWith('VAS') && equip.categoria) {
               countVasos[Number(equip.categoria) - 1].qtd++;
             }
             this.tags.push({
@@ -104,6 +105,7 @@ export class DashboardComponent implements OnInit {
 
             countItens[0].qtd += equip.tipoEquipamento.startsWith('VAS') ? 1 : 0;
             countItens[1].qtd += equip.tipoEquipamento.startsWith('C') ? 1 : 0;
+            countItens[2].qtd += equip.tipoEquipamento.startsWith('T') ? 1 : 0;
           } else if (equip.tipoEquipamento.startsWith('L') || equip.tipoEquipamento.startsWith('E')) {
             const calc = this.calcularPeriodo(equip.inspecao, equip.proximaInspecao);
             this.tags.push({
@@ -111,9 +113,9 @@ export class DashboardComponent implements OnInit {
               periodo: calc, desc: 'Próxima Inspeção'
             });
 
-            countItens[2].qtd += equip.tipoEquipamento.startsWith('L') ? 1 : 0;
-            countItens[3].qtd += equip.tipoEquipamento.startsWith('EL') ? 1 : 0;
-            countItens[4].qtd += equip.tipoEquipamento.startsWith('EQ') ? 1 : 0;
+            countItens[3].qtd += equip.tipoEquipamento.startsWith('L') ? 1 : 0;
+            countItens[4].qtd += equip.tipoEquipamento.startsWith('EL') ? 1 : 0;
+            countItens[5].qtd += equip.tipoEquipamento.startsWith('EQ') ? 1 : 0;
           } else {
             const calc = this.calcularPeriodo(equip.dataCalibracao, equip.proximaCalibracao);
             this.tags.push({
@@ -121,9 +123,9 @@ export class DashboardComponent implements OnInit {
               periodo: calc, desc: 'Próxima Calibração'
             });
 
-            countItens[5].qtd += equip.tipoEquipamento === 'INDICADOR' ? 1 : 0;
-            countItens[6].qtd += equip.tipoEquipamento === 'INDICADOR_TEMPERATURA' ? 1 : 0;
-            countItens[7].qtd += equip.tipoEquipamento.startsWith('VAL') ? 1 : 0;
+            countItens[6].qtd += equip.tipoEquipamento === 'INDICADOR' ? 1 : 0;
+            countItens[7].qtd += equip.tipoEquipamento === 'INDICADOR_TEMPERATURA' ? 1 : 0;
+            countItens[8].qtd += equip.tipoEquipamento.startsWith('VAL') ? 1 : 0;
           }
         })
         this.filteredItensList = countItens.filter(value => value.qtd > 0);
@@ -168,6 +170,7 @@ export class DashboardComponent implements OnInit {
     return opc === 'I' ? [
       { descricao: 'Vaso de pressão', qtd: 0 },
       { descricao: 'Caldeira', qtd: 0 },
+      { descricao: 'Tubulação', qtd: 0 },
       { descricao: 'Linha de vida', qtd: 0 },
       { descricao: 'Elevador', qtd: 0 },
       { descricao: 'Equipamento', qtd: 0 },

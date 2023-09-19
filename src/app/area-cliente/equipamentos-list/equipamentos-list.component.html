@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="tipoEquip == 'VASO' || tipoEquip == 'CALDEIRA'">
+  <div class="row" *ngIf="tipoEquip == 'VASO' || tipoEquip == 'CALDEIRA' || tipoEquip == 'TUBULACAO'">
     <div class="col-sm-12 col-md-6 col-lg-3">
       <mat-form-field>
         <input matInput type="date" placeholder="Inspeção Interna" 
@@ -195,6 +195,15 @@
           <td mat-cell *matCellDef="let element" tabindex="0">
             <span [matTooltip]="element.tipoEquipamento === 'VASO' ? getDescricaoEnum(element.categoria, 'VASO') : fieldValidation(element.categoria)">
               {{ element.tipoEquipamento === 'VASO' ? getDescricaoEnum(element.categoria, 'VASO') : fieldValidation(element.categoria) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="classe">
+          <th mat-header-cell *matHeaderCellDef tabindex="0"> Classe</th>
+          <td mat-cell *matCellDef="let element" tabindex="0">
+            <span [matTooltip]="fieldValidation(element.categoria)">
+              {{ fieldValidation(element.categoria) }}
             </span>
           </td>
         </ng-container>

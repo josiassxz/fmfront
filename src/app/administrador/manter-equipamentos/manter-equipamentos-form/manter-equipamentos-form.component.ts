@@ -22,7 +22,7 @@ import { IndicadoresEnum } from 'src/app/enums/indicadores.enum';
 import { SimNaoEnum } from 'src/app/enums/sim-nao.enum';
 import { InstrumentosEnum } from 'src/app/enums/instrumentos.enum';
 import { StatusEnum } from 'src/app/enums/status.enum';
-import { CategoriaCaldeirasEnum } from 'src/app/enums/categoria-caldeiras.enum';
+import { CategoriaClasseEnum } from 'src/app/enums/categoria-classe.enum';
 import { CategoriaVasosEnum } from 'src/app/enums/categoria-vasos.enum';
 
 @Component({
@@ -76,9 +76,11 @@ export class ManterEquipamentosFormComponent implements OnInit, AfterViewInit {
 
   status = StatusEnum.getValues();
 
-  categoriasCaldeiras = CategoriaCaldeirasEnum.getValues();
+  categoriasCaldeiras = CategoriaClasseEnum.getValuesCategoria();
 
   categoriasVasos = CategoriaVasosEnum.getValues();
+
+  classeTubulacao = CategoriaClasseEnum.getValuesClasse();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -133,6 +135,7 @@ export class ManterEquipamentosFormComponent implements OnInit, AfterViewInit {
       tipoEquipamento: new FormControl('', [Validators.required]),
       categoriaCaldeira: new FormControl(''),
       categoriaVaso: new FormControl(''),
+      classeTubulacao: new FormControl(''),
       inspecaoExterna: new FormControl(''),
       inspecaoInterna: new FormControl(''),
       proximaInspecaoExterna: new FormControl(''),
@@ -177,11 +180,15 @@ export class ManterEquipamentosFormComponent implements OnInit, AfterViewInit {
     this.equipamentoService.get(id).subscribe((res: EquipamentoModel) => {
       this.equipamento = res;
       this.equipamentoForm.reset(res);
+
       if (res.tipoEquipamento === 'CALDEIRA') {
         this.equipamentoForm.patchValue({ categoriaCaldeira: res.categoria });
-      } else {
+      } else if (res.tipoEquipamento === 'VASO') {
         this.equipamentoForm.patchValue({ categoriaVaso: res.categoria });
+      } else {
+        this.equipamentoForm.patchValue({ classeTubulacao: res.categoria });
       }
+
       if (res.tipoEquipamento === 'INDICADOR') {
         this.equipamentoForm.patchValue({ instrumento: res.instrumento });
       } else {
@@ -225,7 +232,7 @@ export class ManterEquipamentosFormComponent implements OnInit, AfterViewInit {
       form.tagEquipamento,
       form.descricao,
       form.localizacao,
-      form.tipoEquipamento === 'CALDEIRA' ? form.categoriaCaldeira : form.categoriaVaso,
+      form.tipoEquipamento === 'CALDEIRA' ? form.categoriaCaldeira : form.tipoEquipamento === 'VASO' ? form.categoriaVaso : form.classeTubulacao,
       form.condicao,
       form.tipoEquipamento,
       form.inspecaoExterna,
