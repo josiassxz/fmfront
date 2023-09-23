@@ -6,3 +6,5 @@ services:
     build: .
     ports:
       - 8081:80
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # Mapeia host.docker.internal para o gateway da máquina host
